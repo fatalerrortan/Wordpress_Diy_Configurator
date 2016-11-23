@@ -28,20 +28,28 @@ function diy_configurator_install(){
 }
 register_activation_hook(__FILE__,'diy_configurator_install');
 
-function remove_header_from_iframe($content){
-
-    $script = "
-        <script type='text/javascript'>
-            jQuery(document).ready(function() {
-                jQuery('body > div.wrapper > div.top-menu.main-menu-top').hide();
-            });
-        </script>
-    ";
-    if(is_page("design your own")){
-        echo $_SERVER['DOCUMENT_ROOT'];
-    }
-//    return $content;
+function init_standard_main_img_size(){
+    add_option('default_width',111, '','yes');
+    add_option('default_height',222, '','yes');
+    add_option('default_top',333, '','yes');
+    add_option('default_left',444, '','yes');
 }
-add_filter('the_content','remove_header_from_iframe');
+register_activation_hook(__FILE__,'init_standard_main_img_size');
+
+//function remove_header_from_iframe($content){
+//
+//    $script = "
+//        <script type='text/javascript'>
+//            jQuery(document).ready(function() {
+//                jQuery('body > div.wrapper > div.top-menu.main-menu-top').hide();
+//            });
+//        </script>
+//    ";
+//    if(is_page("design your own")){
+//        echo $_SERVER['DOCUMENT_ROOT'];
+//    }
+////    return $content;
+//}
+//add_filter('the_content','remove_header_from_iframe');
 
 ?>

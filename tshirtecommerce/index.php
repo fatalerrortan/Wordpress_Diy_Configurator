@@ -161,7 +161,7 @@ $addons = new addons();
 	
 	<?php echo $dg->theme('header'); ?>
 </head>
-<body>	
+<body>
 	<div class="container-fluid">
 		<div id="dg-wapper" class="col-md-12">
 			<div class="alert alert-danger" id="designer-alert" role="alert" style="display:none;"></div>
@@ -405,19 +405,45 @@ if (isset($_GET['id']))
 ?>
 <?php
 /*xulin edit start*/
+
 	$target_json_location = $_SERVER['DOCUMENT_ROOT']."/tshirtecommerce/assets/custom_img/".$_GET['parent']."/".$_GET['parent'].".json";
 /*xulin edit end*/
 ?>
 	<script type="text/javascript">
+
 	jQuery(document).ready(function(){
+
+
 		/*xulin edit start*/
+
+		var global_design_status = [];
+		var standard_product_sku = '<?php echo $_GET['parent'];?>';
+
 		// remove unnesscessary html block
-		jQuery('#dg-sidebar, #dg-designer > div.col-left, #dg-help-functions, #product-thumbs').hide();
+		jQuery('#dg-sidebar, #dg-designer > div.col-left, #dg-help-functions, #product-thumbs, #view-front > div.design-area, #product-attributes > div.form-group.product-fields.product-quantity, #product-attributes > div:nth-child(2)').hide();
+		jQuery('#ui-accordion-2-header-1, #ui-accordion-2-header-2').hide();
+
 		// load json config
-		var configJson = '<?php echo file_get_contents($target_json_location);?>';
+		var configJson = '<?php echo str_replace(array("\r", "\n"), '', file_get_contents($target_json_location));?>';
 		var jsonOjb = jQuery.parseJSON(configJson);
-		console.log('test: ', jsonOjb);
+
+		//set standard size for main img
+		jQuery("img[id*='front-img-images-']").attr("style", "width: "+getParamValue('width')+
+			"; height: "+getParamValue('height')+
+			"; top: "+getParamValue('top')+
+			"; left: "+getParamValue('left')+
+			"; z-index: 200;");
+
+		//load button frame for the first color variant and assign Part of img to the main img
+		jQuery.each(jsonOjb, function(key, value){
+			if(value.color == standard_product_sku){
+				console.log(value.color);
+			}
+		});
+
 		/*xulin edit end*/
+
+
 		jQuery('[data-toggle="tooltip"]').tooltip();
 		<?php if( $color  != '-1' ){ ?>
 		design.imports.productColor('<?php echo $color; ?>');
@@ -433,6 +459,73 @@ if (isset($_GET['id']))
 		<?php } ?>
 		window.parent.setHeigh(jQuery('#dg-wapper').height());
 	});
+	</script>
+
+	<script type="text/javascript">
+		/*xulin edit start*/
+		function getParamValue(paramName) {
+			var url = window.location.search.substring(1); //get rid of "?" in querystring
+			var qArray = url.split('&');
+			for (var i = 0; i < qArray.length; i++)
+			{
+				var pArr = qArray[i].split('=');
+				if (pArr[0] == paramName)
+					return pArr[1];
+			}
+		}
+		jQuery("#product-list-colors span").click(function(){
+			jQuery("img[id*='front-img-images-']").attr("style", "width: "+getParamValue('width')+
+				"; height: "+getParamValue('height')+
+				"; top: "+getParamValue('top')+
+				"; left: "+getParamValue('left')+
+				"; z-index: 200;");
+		});
+
+		function load_button_frame_old(json_item_id, flag){
+			var button_frame = '';
+			var subSku = '';
+			jQuery.each(jsonOjb[json_item_id], function(key, value){
+				if(key == 'sku'){
+					subSku = value;
+					item['subsku'] = subSku;
+				}
+				if(key != 'sku'){
+					var index = key;
+					var items = '';
+					var button_reg_id ='';
+					jQuery.each(value, function(key, value){
+						if(key != 0){
+							if(value.variant[6].status == 'remove'){
+								return;
+							}
+							items = items + "<button class= 'option_button' id='"+ index +"_" + value.variant[0].typ +"' position='"+ value.variant[3].position +"' imgpath='"+ value.variant[4].img_path +"' price='"+ value.variant[5].price +"' option-typ='"+ value.variant[0].typ +"' onclick='loadOptionChange(this)' magento_sku='"+ value.variant[1].sku +"'>" + value.variant[2].label + "</button>&nbsp;";
+							if(value.variant[0].typ == 'default'){
+								loadAjaxImage(subSku ,value.variant[4].img_path, index +"_" + value.variant[0].typ +"_img", value.variant[3].position);
+								button_reg_id = value.variant[0].typ;
+							}
+						}
+					});
+					if(flag == '_init_'){item[key] = button_reg_id;}
+					button_frame =button_frame + "<div id='"+ key +"' class='form-group product-fields'>" +
+						"<label for='fields'>"+ value[0].label +"</label><div id='"+ key +"'>"+ items +"</div></div>";
+				}
+			});
+			global_status_json.push(item);
+			jQuery('#product-list-colors').append(button_frame);
+			return true;
+		}
+		
+		function load_button_frame(obj) {
+			//wait to push into var global_design_status
+			var status_item = {};
+			jQuery.each(obj, function(key, value){
+				if(key == 'color'){
+					status_item['color'] = key;
+				}
+			});
+			return status_item;
+		}
+		/*xulin edit end*/
 	</script>
 </body>
 </html>
