@@ -12,12 +12,18 @@ Author URI: http://www.xulin-tan.de
 function all_scripts_and_styles() {
 //Load JS and CSS files in here
     wp_register_script ('diy_configurator_scripts', plugins_url() . '/Diy_Configurator/js/diy_configurator_scripts.js', array( 'jquery' ),'1.0.0',true);
-    if(is_page("design your own")){
         wp_enqueue_script('diy_configurator_scripts');
-    }
 }
 // script!s! !!!
 add_action( 'wp_enqueue_scripts', 'all_scripts_and_styles' );
+
+// fix zoom func for woocommerce
+function xulin_custom_pretty_foto_js() {
+//Load JS and CSS files in here
+    wp_register_script ('xulin_custom_pretty_foto_js', plugins_url() . '/Diy_Configurator/js/pretty_foto.js', array( 'jquery' ),'1.0.0',true);
+    wp_enqueue_script('xulin_custom_pretty_foto_js');
+}
+add_action( 'wp_enqueue_scripts', 'xulin_custom_pretty_foto_js' );
 
 //create folder structure to generate json config
 function diy_configurator_install(){

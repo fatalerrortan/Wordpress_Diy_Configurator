@@ -435,11 +435,14 @@ if (isset($_GET['id']))
 			"; z-index: 200;");
 
 		//load button frame for the first color variant and assign Part of img to the main img
-		jQuery.each(jsonOjb, function(key, value){
-			if(value.color == standard_product_sku){
-				console.log(value.color);
-			}
-		});
+//		jQuery.each(jsonOjb, function(key, value){
+//			if(value.color == standard_product_sku){
+//				console.log(value.color);
+//			}
+//		});
+		global_design_status = load_button_frame(jsonOjb[0]);
+//		console.log(global_design_status);
+
 
 		/*xulin edit end*/
 
@@ -518,14 +521,46 @@ if (isset($_GET['id']))
 		function load_button_frame(obj) {
 			//wait to push into var global_design_status
 			var status_item = {};
+			var btn_frame_html = '';
+			var label_for_btns = '';
 			jQuery.each(obj, function(key, value){
+				// read color sku and push into gloabl status json
 				if(key == 'color'){
-					status_item['color'] = key;
+					status_item.color = value[0];
+					return;
 				}
+				var btn_html='';
+				// read all variant from each Parition z.b for Aermel Now!
+				jQuery.each(value,function (key,value) {
+
+					if(value.hasOwnProperty('label')){
+						label_for_btns = value.label;
+						return;
+					}
+					// z.B. for Variant!!!
+					var var_typ = value.variant[0].typ;
+					var var_sku = value.variant[1].sku;
+					var var_label = value.variant[2].label;
+					var var_position = value.variant[3].position;
+					var var_img_path = value.variant[4].img_path;
+					var var_price = value.variant[5].price;
+					var var_status = value.variant[6].status;
+
+					btn_html = buttons_html + "<button class='option_button' position='"+var_position
+						+"' img_path='"+var_img_path
+						+"' price='"+var_price
+						+"' var_typ='"+var_typ
+						+"' var_sku='"+var_sku
+						+"' onclick='load_change_with_color(this)'>"+var_label+"</button>";
+				});
+				btn_frame_html = btn_frame_html + "<div class='form-group product-fields'>" +
+					"<label for='fields'>"+ label_for_btns +"</label><div id='"+ key +"'>"+ btn_html +"</div></div>";
 			});
 			return status_item;
+//			console.log(obj);
 		}
 		/*xulin edit end*/
 	</script>
 </body>
 </html>
+
