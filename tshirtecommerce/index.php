@@ -410,22 +410,19 @@ if (isset($_GET['id']))
 /*xulin edit end*/
 ?>
 	<script type="text/javascript">
-
-	jQuery(document).ready(function(){
-
-
 		/*xulin edit start*/
-
 		var global_design_status = [];
-		var standard_product_sku = '<?php echo $_GET['parent'];?>';
-
+		var jsonOjb;
+//		var ressource_root = "<?php //echo $_SERVER['DOCUMENT_ROOT']."/tshirtecommerce/assets/custom_img/".$_GET['parent']."/"; ?>//";
+		var base_url = "<?php echo "http://".$_SERVER['SERVER_NAME']."/tshirtecommerce/assets/custom_img/".$_GET['parent']."/"; ?>";
+	jQuery(document).ready(function(){
 		// remove unnesscessary html block
 		jQuery('#dg-sidebar, #dg-designer > div.col-left, #dg-help-functions, #product-thumbs, #view-front > div.design-area, #product-attributes > div.form-group.product-fields.product-quantity, #product-attributes > div:nth-child(2)').hide();
 		jQuery('#ui-accordion-2-header-1, #ui-accordion-2-header-2').hide();
 
 		// load json config
 		var configJson = '<?php echo str_replace(array("\r", "\n"), '', file_get_contents($target_json_location));?>';
-		var jsonOjb = jQuery.parseJSON(configJson);
+		jsonOjb = jQuery.parseJSON(configJson);
 
 		//set standard size for main img
 		jQuery("img[id*='front-img-images-']").attr("style", "width: "+getParamValue('width')+
@@ -435,18 +432,10 @@ if (isset($_GET['id']))
 			"; z-index: 200;");
 
 		//load button frame for the first color variant and assign Part of img to the main img
-//		jQuery.each(jsonOjb, function(key, value){
-//			if(value.color == standard_product_sku){
-//				console.log(value.color);
-//			}
-//		});
 		global_design_status = load_button_frame(jsonOjb[0]);
 //		console.log(global_design_status);
 
-
 		/*xulin edit end*/
-
-
 		jQuery('[data-toggle="tooltip"]').tooltip();
 		<?php if( $color  != '-1' ){ ?>
 		design.imports.productColor('<?php echo $color; ?>');
@@ -466,6 +455,8 @@ if (isset($_GET['id']))
 
 	<script type="text/javascript">
 		/*xulin edit start*/
+
+		//get Params from iframe url
 		function getParamValue(paramName) {
 			var url = window.location.search.substring(1); //get rid of "?" in querystring
 			var qArray = url.split('&');
@@ -476,15 +467,44 @@ if (isset($_GET['id']))
 					return pArr[1];
 			}
 		}
+
 		jQuery("#product-list-colors span").click(function(){
+			//set Default Size info
 			jQuery("img[id*='front-img-images-']").attr("style", "width: "+getParamValue('width')+
 				"; height: "+getParamValue('height')+
 				"; top: "+getParamValue('top')+
 				"; left: "+getParamValue('left')+
 				"; z-index: 200;");
+			//callback for event click on Color option
+			var target_color = jQuery(this).attr('data-original-title');
+			if(global_design_status.color != target_color){
+				jQuery("img[id*='"+ global_design_status.color_id +"_']").remove();
+				var target_ojb = jsonOjb.find(array_search_condition);
+				console.log(target_ojb);
+//				load_button_frame();
+			}
+			function array_search_condition(element) {return element.color[1] == target_color;}
+			// don't forget to change color and color_id in global design status json!!!
 		});
 
-		function load_button_frame_old(json_item_id, flag){
+		//load imgs for design color change
+		function ajax_load_design_imgs(img_path, color_id, position, img_flag) {
+			var position_detail = position.split(' ');
+			var width = position_detail[0];
+			var height = position_detail[1];
+			var top = position_detail[2];
+			var left = position_detail[3];
+			if(img_path != 'undefined'){
+				var full_img_path = base_url + color_id + '/' + img_path;
+				var img_id = color_id+"_"+img_flag;
+				var img_html = "<img id="+ img_id +" src="+ full_img_path +" width="+ width +" height="+ height +
+					" style='z-index: 999; position: absolute; left: "+ left +";top:"+ top +"' />";
+				jQuery('#view-front').append(img_html);
+				return true;
+			}
+		}
+		//load different button frame according to color variant
+		function load_button_frame_old(json_itxem_id, flag){
 			var button_frame = '';
 			var subSku = '';
 			jQuery.each(jsonOjb[json_item_id], function(key, value){
@@ -517,16 +537,31 @@ if (isset($_GET['id']))
 			jQuery('#product-list-colors').append(button_frame);
 			return true;
 		}
-		
+		// load imgs when click on a variant option
+		function load_change_with_var(btn_element) {
+			var item_key_in_global_json = jQuery(btn_element).parent().attr('id');
+			var var_type_in_global_json = global_design_status[item_key_in_global_json];
+			var target_var_type = jQuery(btn_element).attr('var_typ');
+			if(var_type_in_global_json != target_var_type){
+				var selector = "#"+global_design_status.color_id+"_"+item_key_in_global_json;
+				jQuery(selector).remove();
+				ajax_load_design_imgs(jQuery(btn_element).attr('img_path'), global_design_status.color_id,
+					jQuery(btn_element).attr('position'), item_key_in_global_json);
+				global_design_status[item_key_in_global_json] = target_var_type;
+			}
+//			console.log(global_design_status);
+		}
+		//load different button frame according to color variant
 		function load_button_frame(obj) {
 			//wait to push into var global_design_status
 			var status_item = {};
 			var btn_frame_html = '';
 			var label_for_btns = '';
-			jQuery.each(obj, function(key, value){
+			jQuery.each(obj, function(key_level_0, value){
 				// read color sku and push into gloabl status json
-				if(key == 'color'){
-					status_item.color = value[0];
+				if(key_level_0 == 'color'){
+					status_item.color_id = value[0];
+					status_item.color = value[1];
 					return;
 				}
 				var btn_html='';
@@ -545,19 +580,23 @@ if (isset($_GET['id']))
 					var var_img_path = value.variant[4].img_path;
 					var var_price = value.variant[5].price;
 					var var_status = value.variant[6].status;
-
-					btn_html = buttons_html + "<button class='option_button' position='"+var_position
+					//set Dafault to gloabl status json
+					if(var_typ == 'default'){
+						status_item[key_level_0] = var_typ;
+						ajax_load_design_imgs(var_img_path, status_item.color_id, var_position, key_level_0);
+					}
+					btn_html = btn_html + "<button class='option_button' position='"+var_position
 						+"' img_path='"+var_img_path
 						+"' price='"+var_price
 						+"' var_typ='"+var_typ
 						+"' var_sku='"+var_sku
-						+"' onclick='load_change_with_color(this)'>"+var_label+"</button>";
+						+"' onclick='load_change_with_var(this)'>"+var_label+"</button>";
 				});
 				btn_frame_html = btn_frame_html + "<div class='form-group product-fields'>" +
-					"<label for='fields'>"+ label_for_btns +"</label><div id='"+ key +"'>"+ btn_html +"</div></div>";
+					"<label for='fields'>"+ label_for_btns +"</label><div id='"+ key_level_0 +"'>"+ btn_html +"</div></div>";
 			});
+			jQuery("#product-details").append(btn_frame_html);
 			return status_item;
-//			console.log(obj);
 		}
 		/*xulin edit end*/
 	</script>

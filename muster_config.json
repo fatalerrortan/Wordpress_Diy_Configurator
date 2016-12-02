@@ -1,6 +1,6 @@
 [
    {
-      "color":[2626,"blau"],
+      "color":[24,"blau"],
       "aermel":[
          {
             "label":"Ärmelart"
@@ -17,7 +17,7 @@
                   "label":"Standard"
                },
                {
-                  "position":"182px 80px -8px 183px"
+                  "position":"135px 40px 60px 174px"
                },
                {
                   "img_path":"091_st_aermel.png"
@@ -42,7 +42,7 @@
                   "label":"Puffärmel"
                },
                {
-                  "position":"183px 80px -7px 183px"
+                  "position":"135px 40px 60px 174px"
                },
                {
                   "img_path":"091_var1_aermel.png"
@@ -97,7 +97,7 @@
                   "label":"Blau"
                },
                {
-                  "position":"44px 33px 17px 253px"
+                  "position":"29px 18px 72px 229px"
                },
                {
                   "img_path":"var1_futterstoff.png"
@@ -122,7 +122,7 @@
                   "label":"Pink"
                },
                {
-                  "position":"44px 33px 17px 253px"
+                  "position":"29px 18px 72px 229px"
                },
                {
                   "img_path":"var_2_futterstoff.png"
@@ -177,7 +177,7 @@
                   "label":"Schlitz"
                },
                {
-                  "position":"139px 47px 215px 208px"
+                  "position":"100px 28px 218px 193px"
                },
                {
                   "img_path":"091_var1_taschenart.png"
@@ -232,7 +232,7 @@
                   "label":"Bunt"
                },
                {
-                  "position":"30px 188px 70px 263px"
+                  "position":"18px 156px 100px 236px"
                },
                {
                   "img_path":"091_var1_knopf.png"
@@ -257,7 +257,7 @@
                   "label":"Braun"
                },
                {
-                  "position":"30px 188px 70px 263px"
+                  "position":"18px 156px 100px 236px"
                },
                {
                   "img_path":"091_var2_knopf.png"
@@ -273,7 +273,7 @@
       ]
    },
    {
-      "color":[2627,"gold"],
+      "color":[25,"gold"],
       "aermel":[
          {
             "label":"Ärmelart"
@@ -290,7 +290,7 @@
                   "label":"Standard"
                },
                {
-                  "position":"179px 80px -9px 184px"
+                  "position":"135px 40px 60px 174px"
                },
                {
                   "img_path":"092_st_aemrel.png"
@@ -315,7 +315,7 @@
                   "label":"Puffärmel"
                },
                {
-                  "position":"179px 80px -9px 184px"
+                  "position":"135px 40px 60px 174px"
                },
                {
                   "img_path":"092_var1_aeremel.png"
@@ -370,7 +370,7 @@
                   "label":"Blau"
                },
                {
-                  "position":"44px 33px 19px 252px"
+                  "position":"29px 18px 72px 229px"
                },
                {
                   "img_path":"var1_futterstoff.png"
@@ -395,7 +395,7 @@
                   "label":"Pink"
                },
                {
-                  "position":"44px 33px 17px 253px"
+                  "position":"29px 18px 72px 229px"
                },
                {
                   "img_path":"var_2_futterstoff.png"
@@ -450,7 +450,7 @@
                   "label":"Schlitz"
                },
                {
-                  "position":"139px 47px 215px 208px"
+                  "position":"100px 28px 218px 193px"
                },
                {
                   "img_path":"092_var1_taschenart.png"
@@ -496,31 +496,6 @@
          {
             "variant":[
                {
-                  "typ":"var_1"
-               },
-               {
-                  "sku":"44718"
-               },
-               {
-                  "label":"Knopf Bunt"
-               },
-               {
-                  "position":"222px 222px 222px 222px"
-               },
-               {
-                  "img_path":""
-               },
-               {
-                  "price":"10.9900"
-               },
-               {
-                  "status":"remove"
-               }
-            ]
-         },
-         {
-            "variant":[
-               {
                   "typ":"var_2"
                },
                {
@@ -546,7 +521,7 @@
       ]
    },
    {
-      "color":[2628,"lila"],
+      "color":[26,"lila"],
       "aermel":[
          {
             "label":"Ärmelart"
@@ -563,7 +538,7 @@
                   "label":"Standard"
                },
                {
-                  "position":"180px 80px -9px 184px"
+                  "position":"135px 40px 60px 174px"
                },
                {
                   "img_path":"093_st_aeremel.png"
@@ -588,7 +563,7 @@
                   "label":"Puffärmel"
                },
                {
-                  "position":"182px 80px -9px 183px"
+                  "position":"135px 40px 60px 174px"
                },
                {
                   "img_path":"093_var1_aermel.png"
@@ -643,7 +618,7 @@
                   "label":"Blau"
                },
                {
-                  "position":"44px 33px 17px 253px"
+                  "position":"29px 18px 72px 229px"
                },
                {
                   "img_path":"var1_futterstoff.png"
@@ -668,7 +643,7 @@
                   "label":"Pink"
                },
                {
-                  "position":"44px 33px 17px 253px"
+                  "position":"29px 18px 72px 229px"
                },
                {
                   "img_path":"var_2_futterstoff.png"
@@ -723,7 +698,7 @@
                   "label":"Schlitz"
                },
                {
-                  "position":"139px 47px 215px 208px"
+                  "position":"100px 28px 218px 193px"
                },
                {
                   "img_path":"093_var1_taschenart.png"
@@ -778,7 +753,7 @@
                   "label":"Knopf Bunt"
                },
                {
-                  "position":"222px 222px 222px 222px"
+                  "position":"18px 156px 100px 236px"
                },
                {
                   "img_path":""
@@ -803,7 +778,7 @@
                   "label":"knopf Braun"
                },
                {
-                  "position":"222px 222px 222px 222px"
+                  "position":"18px 156px 100px 236px"
                },
                {
                   "img_path":""
