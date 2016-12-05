@@ -26,7 +26,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -51,7 +51,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -81,7 +81,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -106,7 +106,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -131,7 +131,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -161,7 +161,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -186,7 +186,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -216,7 +216,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -241,7 +241,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -266,7 +266,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -299,7 +299,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -324,7 +324,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -354,7 +354,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -379,7 +379,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -404,7 +404,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -434,7 +434,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -459,7 +459,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -489,7 +489,32 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
+               }
+            ]
+         },
+         {
+            "variant":[
+               {
+                  "typ":"var_1"
+               },
+               {
+                  "sku":"44718"
+               },
+               {
+                  "label":"Bunt"
+               },
+               {
+                  "position":"18px 156px 100px 236px"
+               },
+               {
+                  "img_path":"091_var1_knopf.png"
+               },
+               {
+                  "price":"10.9900"
+               },
+               {
+                  "active":"false"
                }
             ]
          },
@@ -514,7 +539,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -547,7 +572,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -572,7 +597,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -602,7 +627,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -627,7 +652,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -652,7 +677,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -682,7 +707,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -707,7 +732,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          }
@@ -737,7 +762,7 @@
                   "price":"0"
                },
                {
-                  "status":"active"
+                  "active":"true"
                }
             ]
          },
@@ -750,7 +775,7 @@
                   "sku":"44718"
                },
                {
-                  "label":"Knopf Bunt"
+                  "label":"Bunt"
                },
                {
                   "position":"18px 156px 100px 236px"
@@ -762,7 +787,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"remove"
+                  "active":"false"
                }
             ]
          },
@@ -775,7 +800,7 @@
                   "sku":"44719"
                },
                {
-                  "label":"knopf Braun"
+                  "label":"Braun"
                },
                {
                   "position":"18px 156px 100px 236px"
@@ -787,7 +812,7 @@
                   "price":"10.9900"
                },
                {
-                  "status":"remove"
+                  "active":"false"
                }
             ]
          }

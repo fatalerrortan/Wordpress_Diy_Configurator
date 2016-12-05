@@ -432,8 +432,8 @@ if (isset($_GET['id']))
 			"; z-index: 200;");
 
 		//load button frame for the first color variant and assign Part of img to the main img
-		global_design_status = load_button_frame(jsonOjb[0]);
-//		console.log(global_design_status);
+//		console.log(jsonOjb[0]);
+		load_button_frame(jsonOjb[0], true);
 
 		/*xulin edit end*/
 		jQuery('[data-toggle="tooltip"]').tooltip();
@@ -478,13 +478,13 @@ if (isset($_GET['id']))
 			//callback for event click on Color option
 			var target_color = jQuery(this).attr('data-original-title');
 			if(global_design_status.color != target_color){
-				jQuery("img[id*='"+ global_design_status.color_id +"_']").remove();
+				jQuery("img[id*='"+ global_design_status.color_id +"_'], div.custom_var_field").remove();
 				var target_ojb = jsonOjb.find(array_search_condition);
-				console.log(target_ojb);
-//				load_button_frame();
+				load_button_frame(target_ojb);
 			}
 			function array_search_condition(element) {return element.color[1] == target_color;}
 			// don't forget to change color and color_id in global design status json!!!
+			console.log(global_design_status);
 		});
 
 		//load imgs for design color change
@@ -549,10 +549,10 @@ if (isset($_GET['id']))
 					jQuery(btn_element).attr('position'), item_key_in_global_json);
 				global_design_status[item_key_in_global_json] = target_var_type;
 			}
-//			console.log(global_design_status);
+			console.log(global_design_status);
 		}
 		//load different button frame according to color variant
-		function load_button_frame(obj) {
+		function load_button_frame(obj,__init__ = false) {
 			//wait to push into var global_design_status
 			var status_item = {};
 			var btn_frame_html = '';
@@ -560,8 +560,8 @@ if (isset($_GET['id']))
 			jQuery.each(obj, function(key_level_0, value){
 				// read color sku and push into gloabl status json
 				if(key_level_0 == 'color'){
-					status_item.color_id = value[0];
-					status_item.color = value[1];
+					global_design_status['color_id'] = value[0];
+					global_design_status['color'] = value[1];
 					return;
 				}
 				var btn_html='';
@@ -579,11 +579,18 @@ if (isset($_GET['id']))
 					var var_position = value.variant[3].position;
 					var var_img_path = value.variant[4].img_path;
 					var var_price = value.variant[5].price;
-					var var_status = value.variant[6].status;
+					var var_status =value.variant[6].active;
+
 					//set Dafault to gloabl status json
-					if(var_typ == 'default'){
-						status_item[key_level_0] = var_typ;
-						ajax_load_design_imgs(var_img_path, status_item.color_id, var_position, key_level_0);
+					if(var_typ == 'default' && __init__ == true){
+						global_design_status[key_level_0] = var_typ;
+						ajax_load_design_imgs(var_img_path, global_design_status['color_id'], var_position, key_level_0);
+					}else if(global_design_status[key_level_0] == var_typ){
+						if(var_status == 'false'){
+						global_design_status[key_level_0] = 'default';
+						return;
+						}
+						ajax_load_design_imgs(var_img_path, global_design_status['color_id'], var_position, key_level_0);
 					}
 					btn_html = btn_html + "<button class='option_button' position='"+var_position
 						+"' img_path='"+var_img_path
@@ -592,11 +599,11 @@ if (isset($_GET['id']))
 						+"' var_sku='"+var_sku
 						+"' onclick='load_change_with_var(this)'>"+var_label+"</button>";
 				});
-				btn_frame_html = btn_frame_html + "<div class='form-group product-fields'>" +
+				btn_frame_html = btn_frame_html + "<div class='custom_var_field'>" +
 					"<label for='fields'>"+ label_for_btns +"</label><div id='"+ key_level_0 +"'>"+ btn_html +"</div></div>";
 			});
 			jQuery("#product-details").append(btn_frame_html);
-			return status_item;
+			return true;
 		}
 		/*xulin edit end*/
 	</script>
