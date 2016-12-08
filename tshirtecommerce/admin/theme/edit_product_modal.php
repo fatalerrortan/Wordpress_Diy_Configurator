@@ -593,9 +593,25 @@
 							<?php
 								$serialized_config_basis = file_get_contents($_SERVER['DOCUMENT_ROOT']."/tshirtecommerce/assets/custom_img/design_config_basis.txt");
 								$pArray = unserialize($serialized_config_basis);
+								$colors = array('test');
+								$main_options = '';
+								$variant_options = '';
 								foreach($pArray as $cate){
-									print_r($cate);
-									echo "<hr />";
+									if(strtolower($cate['cate_name']) == 'color') {$color_flag = "style='display: none'";}
+									$main_options .= "<option id='" . strtolower($cate['cate_name']) . "' ".$color_flag.">" . $cate['cate_name'] . "</option>";
+									if(strtolower($cate['cate_name']) == 'color'){$colors = $cate['products']; continue;}
+									$variant_options .= get_part_products(strtolower($cate['cate_name']), $cate['products']);
+								}
+								function get_part_products($cate_name, $products){
+
+									$html = '';
+									$html .= "<td style='border: 1px dotted #0074A2; display: none' class='". $cate_name."'><span>Variant of Part Design</span><br />
+																<select class='form-control'>";
+									foreach ($products as $product){
+										$html .= "<option class='".$product['product_id']."'>".$product['product_name']."</option>";
+									}
+									$html .= "</select></td>";
+									return $html;
 								}
 							?>
 							<a href="#" id="add-new-details" class="btn btn-primary white"><i class="fa icon-plus"> Add/Get Diy Details</i></a><br />
@@ -604,21 +620,11 @@
 									<td style="border: 1px dotted #0074A2;">
 										<span>Part of Design</span>
 										<select class="form-control" id="design_part">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
+											<option id="wait_for_selecting">Choose your Part to design</option>
+											<?php echo $main_options; ?>
 										</select>
 									</td>
-									<td style="border: 1px dotted #0074A2;">
-										<span>Variant of Part Design</span>
-										<select class="form-control">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-										</select>
-									</td>
+									<?php echo $variant_options; ?>
 									<td><a href="#" id="add-new-variant" class="btn btn-primary white"><i class="fa fa-plus-square-o fa-2x" aria-hidden="true"></i></a></td>
 								</tr>
 							</table>
@@ -656,14 +662,60 @@
 		<script type="text/javascript">
 
 //			Xulin edit start
+ 		var colors = <?php echo json_encode($colors);?>;
+			//When add Button clicked
+			jQuery("#add-new-variant").click(function () {
+				var main_selected = jQuery("#design_part").find("option:selected").text();
+				var id_to_detect = jQuery("#design_part").find("option:selected").attr('id');
+				if(id_to_detect == 'wait_for_selecting'){
+					alert("Bitte Wählen Sie ein Part zu Design!");
+					return false;
+				}
+				var variant_selected_name = jQuery("td."+id_to_detect).find("option:selected").text();
+				var variant_selected_sku = jQuery("td."+id_to_detect).find("option:selected").attr('class');
+				var table_html = get_single_table_for_design(main_selected, variant_selected_name, variant_selected_sku);
+				jQuery("#diy_config_feld div.design_box").append(table_html);
+
+			});
+			// func for generating table to show choosed Variants
+			function get_single_table_for_design(cate, var_name, var_sku) {
+				var html = "<div class='"+cate.toLowerCase()+"' >"+
+								"<h4 style='margin-left: 7px'>"+cate+"</h4>"+
+								"<div class='variant_box' var_type='default' style='margin-left: 7px'>"+
+					            	"<span>Label: </span><input type='text' name='front_label' class='front_label' value='Standard' style='margin-bottom: 7px'/>" +
+									"<span>Position: </span><input type='text' name='position' class='position' style='margin-bottom: 7px' />" +
+									"<span>Bild: </span><input type='file' name='img_path' class='img_path' style='margin-bottom: 7px'/>" +
+									"<span>Preis: </span><input type='text' name='price' class='price' style='margin-bottom: 7px'/>" +
+									"<span>Aktiv: </span><select><option value='true'>Ja</option><option value='false'>Nein</option></select></div><hr />";
+				//generating Default Block
+					html = html + "</div>";
+				return html;
+			}
+
+			//when main option selected
+			jQuery("#design_part").change(function () {
+				var active_option = jQuery(this).find("option[class*='active']").attr('id');
+				var select_to_show = jQuery(this).children('option:selected').attr('id');
+//				alert("now active: "+active_option+" and to show: "+select_to_show);
+				if(active_option != select_to_show) {
+					jQuery("td." + active_option + "").hide();
+					jQuery(this).find("option[class*='active']").removeClass('active');
+					jQuery(this).children('option:selected').addClass('active');
+					jQuery("td." + select_to_show + "").show();
+				}
+			});
+			// when button add/get diy design clicked
 			jQuery('#add-new-details').click(function () {
 //				if color_* exists load json config else get tabel for design
 				jQuery("#diy_config_feld, #diy_toolbar").show();
 				var design_feld_html = '<br />';
 				jQuery("tr[id*='color_']").each(function () {
 					var design_color = jQuery(this).children(":nth-child(2)").find("input").val();
-					console.log(design_color);
-					design_feld_html = design_feld_html + "<div style='float: left;border-style: dotted; margin-left: 10px; width: 247px' id='"+ design_color +"'><h5>Design for "+design_color+"</h5></div>";
+					var target_color = colors.find(get_target_color);
+					design_feld_html = design_feld_html + "<div class='design_box' style='float: left;border-style: dotted; margin-left: 10px; width: 247px' " +
+						"id='"+ design_color.toLowerCase() +"' sku='"+target_color.product_id +"'><h5>Design for "+design_color+" (SKU:" + target_color.product_id +")</h5></div>";
+					function get_target_color(element) {return  element.product_name.toLowerCase() == design_color.toLowerCase();}
+					console.log(target_color);
 				});
 				jQuery("#diy_config_feld").html(design_feld_html);
 			});

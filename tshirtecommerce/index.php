@@ -503,40 +503,6 @@ if (isset($_GET['id']))
 				return true;
 			}
 		}
-		//load different button frame according to color variant
-		function load_button_frame_old(json_itxem_id, flag){
-			var button_frame = '';
-			var subSku = '';
-			jQuery.each(jsonOjb[json_item_id], function(key, value){
-				if(key == 'sku'){
-					subSku = value;
-					item['subsku'] = subSku;
-				}
-				if(key != 'sku'){
-					var index = key;
-					var items = '';
-					var button_reg_id ='';
-					jQuery.each(value, function(key, value){
-						if(key != 0){
-							if(value.variant[6].status == 'remove'){
-								return;
-							}
-							items = items + "<button class= 'option_button' id='"+ index +"_" + value.variant[0].typ +"' position='"+ value.variant[3].position +"' imgpath='"+ value.variant[4].img_path +"' price='"+ value.variant[5].price +"' option-typ='"+ value.variant[0].typ +"' onclick='loadOptionChange(this)' magento_sku='"+ value.variant[1].sku +"'>" + value.variant[2].label + "</button>&nbsp;";
-							if(value.variant[0].typ == 'default'){
-								loadAjaxImage(subSku ,value.variant[4].img_path, index +"_" + value.variant[0].typ +"_img", value.variant[3].position);
-								button_reg_id = value.variant[0].typ;
-							}
-						}
-					});
-					if(flag == '_init_'){item[key] = button_reg_id;}
-					button_frame =button_frame + "<div id='"+ key +"' class='form-group product-fields'>" +
-						"<label for='fields'>"+ value[0].label +"</label><div id='"+ key +"'>"+ items +"</div></div>";
-				}
-			});
-			global_status_json.push(item);
-			jQuery('#product-list-colors').append(button_frame);
-			return true;
-		}
 		// load imgs when click on a variant option
 		function load_change_with_var(btn_element) {
 			var item_key_in_global_json = jQuery(btn_element).parent().attr('id');

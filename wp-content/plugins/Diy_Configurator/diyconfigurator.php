@@ -65,10 +65,14 @@ function get_target_categories(){
         'include' => ''
     );
     $product_categories = get_terms('product_cat', $args);
+    //get Category id by Category Name
+    $main_cate_id = get_term_by('slug', 'diy_product_options', 'product_cat', 'ARRAY_A')['term_id'];
+
     foreach ($product_categories as $cate) {
         $cate_parent_id = $cate->parent;
-        if ($cate_parent_id == 7) {
+        if ($cate_parent_id == $main_cate_id) {
             $cate_name = $cate->name;
+//            if(strtolower($cate_name) == 'color'){}
             $cate_slug = $cate->slug;
             $cate_id = $cate->term_taxonomy_id;
 //            $target_categories[$cate_id] = $cate_name;
