@@ -16,6 +16,15 @@ function all_scripts_and_styles() {
 // script!s! !!!
 add_action( 'wp_enqueue_scripts', 'all_scripts_and_styles' );
 
+//add js to admin woocommerce product edit
+function add_js_admin_product_edit( $hook ) {
+    if ('post.php' != $hook) {
+        return;
+    }
+    wp_enqueue_script( 'admin_product_edit_js', plugin_dir_url( __FILE__ ) . '/js/admin_product_edit.js' );
+}
+add_action('admin_enqueue_scripts', 'add_js_admin_product_edit');
+
 // fix zoom func for woocommerce
 function xulin_custom_pretty_foto_js() {
 //Load JS and CSS files in here

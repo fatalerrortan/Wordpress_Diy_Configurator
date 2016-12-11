@@ -663,6 +663,11 @@
 
 //			Xulin edit start
  		var colors = <?php echo json_encode($colors);?>;
+			// listen event in parent document "update" clicked
+			jQuery('body').on('generate_json_config', function(e) {
+				alert("Hello, World! Message received!");
+			});
+
 			//When add Button clicked
 			jQuery("#add-new-variant").click(function () {
 				var main_selected = jQuery("#design_part").find("option:selected").text();
@@ -673,25 +678,45 @@
 				}
 				var variant_selected_name = jQuery("td."+id_to_detect).find("option:selected").text();
 				var variant_selected_sku = jQuery("td."+id_to_detect).find("option:selected").attr('class');
-				var table_html = get_single_table_for_design(main_selected, variant_selected_name, variant_selected_sku);
-				jQuery("#diy_config_feld div.design_box").append(table_html);
-
+				if(jQuery("#diy_config_feld > div.design_box div."+main_selected).length == false){
+					var table_html = get_single_block_for_design(main_selected, variant_selected_name, variant_selected_sku, true);
+					jQuery("#diy_config_feld div.design_box").append(table_html);
+				}else{
+					if(jQuery("#diy_config_feld > div.design_box div."+main_selected+" div.variant_box[var_type*='"+variant_selected_name+"']").length != false){
+						alert('Bereits Existiert');
+						return false;
+					}else {
+						var single_variant_box_html = get_single_block_for_design('', variant_selected_name, variant_selected_sku);
+						jQuery("#diy_config_feld > div.design_box div."+main_selected).append(single_variant_box_html);
+					}
+				}
 			});
 			// func for generating table to show choosed Variants
-			function get_single_table_for_design(cate, var_name, var_sku) {
-				var html = "<div class='"+cate.toLowerCase()+"' >"+
-								"<h4 style='margin-left: 7px'>"+cate+"</h4>"+
-								"<div class='variant_box' var_type='default' style='margin-left: 7px'>"+
-					            	"<span>Label: </span><input type='text' name='front_label' class='front_label' value='Standard' style='margin-bottom: 7px'/>" +
-									"<span>Position: </span><input type='text' name='position' class='position' style='margin-bottom: 7px' />" +
-									"<span>Bild: </span><input type='file' name='img_path' class='img_path' style='margin-bottom: 7px'/>" +
-									"<span>Preis: </span><input type='text' name='price' class='price' style='margin-bottom: 7px'/>" +
-									"<span>Aktiv: </span><select><option value='true'>Ja</option><option value='false'>Nein</option></select></div><hr />";
-				//generating Default Block
-					html = html + "</div>";
-				return html;
+			function get_single_block_for_design(cate, var_name, var_sku, with_default = false) {
+				if(with_default != false){
+					var html = "<div class='"+cate.toLowerCase()+"' >"+
+						"<h4 style='margin-left: 7px; color: #428BCA'>"+cate+"</h4>"+
+						get_variant_for_table('default', '')+
+						get_variant_for_table(var_name, var_sku);
+					html = html + "</div><hr style='display: block;height: 2px;border-top: 3px solid #4299D8;'/>";
+					return html;
+				}else {
+					return get_variant_for_table(var_name, var_sku);
+				}
 			}
 
+			function get_variant_for_table(name, sku) {
+				var flag = '';
+				if(name == 'default'){flag = 'disabled';}
+				var html = "<div class='variant_box' var_sku='"+sku+"' var_type='"+name+"' style='margin-left: 7px'>"+
+						"--<b style='color: green'>"+ name +"</b>--<br />"+
+					"<span>Label: </span><input type='text' name='front_label' class='front_label' value='"+name+"' style='margin-bottom: 7px'/><br />" +
+					"<span>Position: </span><input type='text' name='position' class='position' style='margin-bottom: 7px' /><br />" +
+					"<span>Bild: </span><input type='file' name='img_path' class='img_path' style='margin-bottom: 7px'/><br />" +
+					"<span>Preis: </span><input type='text' name='price' class='price' style='margin-bottom: 7px'/><br />" +
+					"<span>Aktiv: </span><select><option value='true'>Ja</option><option value='false' "+flag+">Nein</option></select></div><hr style='display: block;height: 2px;border-top: 2px solid #008000;'/>";
+				return html;
+			}
 			//when main option selected
 			jQuery("#design_part").change(function () {
 				var active_option = jQuery(this).find("option[class*='active']").attr('id');
@@ -706,14 +731,13 @@
 			});
 			// when button add/get diy design clicked
 			jQuery('#add-new-details').click(function () {
-//				if color_* exists load json config else get tabel for design
 				jQuery("#diy_config_feld, #diy_toolbar").show();
 				var design_feld_html = '<br />';
 				jQuery("tr[id*='color_']").each(function () {
 					var design_color = jQuery(this).children(":nth-child(2)").find("input").val();
 					var target_color = colors.find(get_target_color);
 					design_feld_html = design_feld_html + "<div class='design_box' style='float: left;border-style: dotted; margin-left: 10px; width: 247px' " +
-						"id='"+ design_color.toLowerCase() +"' sku='"+target_color.product_id +"'><h5>Design for "+design_color+" (SKU:" + target_color.product_id +")</h5></div>";
+						"id='"+ design_color.toLowerCase() +"' sku='"+target_color.product_id +"'><h4><b>Design for "+design_color+" (SKU:" + target_color.product_id +")</b></h4></div>";
 					function get_target_color(element) {return  element.product_name.toLowerCase() == design_color.toLowerCase();}
 					console.log(target_color);
 				});
