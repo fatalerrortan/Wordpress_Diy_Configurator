@@ -660,14 +660,81 @@
 		<div id="ajax-modal" class="modal fade" tabindex="-1" style="display: none;"></div>
 
 		<script type="text/javascript">
-
-//			Xulin edit start
+			//			Xulin edit start
+			jQuery(document).ready(function () {
+				alert('ready to read json config!');
+			});
  		var colors = <?php echo json_encode($colors);?>;
 			// listen event in parent document "update" clicked
-			jQuery('body').on('generate_json_config', function(e) {
-				alert("Hello, World! Message received!");
+			var design_config_json = [];
+			jQuery('body').on('generate_json_config', function() {
+				jQuery("#diy_config_feld div.design_box").each(function () {
+					// read Color box
+					var design_color_box = {};
+					var current_color = jQuery(this);
+					var color = [current_color.attr('sku'),current_color.attr('id')];
+					design_color_box.color = color;
+					//read variant box
+					current_color.find('div').each(function () {
+						var current_part_wp = jQuery(this);
+						var current_part = [];
+						current_part.push({"label":current_part_wp.find('h4').html()});
+						var var_index = 0;
+						current_part_wp.find('div.variant_box').each(function () {
+							var current_variant_wp = jQuery(this);
+							var current_variant = [];
+							if(var_index == 0){
+								current_variant.push({"typ":"default"});
+								var_index++;
+							} else{current_variant.push({"typ":"var_"+var_index});var_index++;}
+							current_variant.push({"sku":current_variant_wp.attr('var_sku')});
+							current_variant.push({"label":current_variant_wp.find("input[class='front_label']").val()});
+							current_variant.push({"position":current_variant_wp.find("input[class='position']").val()});
+							current_variant.push({"img_path":current_variant_wp.find("input[class='img_path']").val()});
+							current_variant.push({"price":current_variant_wp.find("input[class='price']").val()});
+							current_variant.push({"active":current_variant_wp.find("select option:selected").text()});
+							current_part.push({"variant":current_variant});
+						});
+						design_color_box[current_part_wp.attr('class')] = current_part;
+					});
+					design_config_json.push(design_color_box);
+				});
 			});
-
+			//for test #panel_tab2_example2 > div.row > div:nth-child(1) > p
+			jQuery("#panel_tab2_example2 > div.row > div:nth-child(1) > p").click(function () {
+				jQuery("#diy_config_feld div.design_box").each(function () {
+					// read Color box
+					var design_color_box = {};
+					var current_color = jQuery(this);
+					var color = [current_color.attr('sku'),current_color.attr('id')];
+					design_color_box.color = color;
+					//read variant box
+					current_color.find('div').each(function () {
+						var current_part_wp = jQuery(this);
+						var current_part = [];
+						current_part.push({"label":current_part_wp.find('h4').html()});
+						var var_index = 0;
+						current_part_wp.find('div.variant_box').each(function () {
+							var current_variant_wp = jQuery(this);
+							var current_variant = [];
+							if(var_index == 0){
+								current_variant.push({"typ":"default"});
+								var_index++;
+							} else{current_variant.push({"typ":"var_"+var_index});var_index++;}
+							current_variant.push({"sku":current_variant_wp.attr('var_sku')});
+							current_variant.push({"label":current_variant_wp.find("input[class='front_label']").val()});
+							current_variant.push({"position":current_variant_wp.find("input[class='position']").val()});
+							current_variant.push({"img_path":current_variant_wp.find("input[class='img_path']").val()});
+							current_variant.push({"price":current_variant_wp.find("input[class='price']").val()});
+							current_variant.push({"active":current_variant_wp.find("select option:selected").text()});
+							current_part.push({"variant":current_variant});
+						});
+						design_color_box[current_part_wp.attr('class')] = current_part;
+					});
+					design_config_json.push(design_color_box);
+				});
+				console.log(design_config_json);
+			});
 			//When add Button clicked
 			jQuery("#add-new-variant").click(function () {
 				var main_selected = jQuery("#design_part").find("option:selected").text();
@@ -739,7 +806,7 @@
 					design_feld_html = design_feld_html + "<div class='design_box' style='float: left;border-style: dotted; margin-left: 10px; width: 247px' " +
 						"id='"+ design_color.toLowerCase() +"' sku='"+target_color.product_id +"'><h4><b>Design for "+design_color+" (SKU:" + target_color.product_id +")</b></h4></div>";
 					function get_target_color(element) {return  element.product_name.toLowerCase() == design_color.toLowerCase();}
-					console.log(target_color);
+//					console.log(target_color);
 				});
 				jQuery("#diy_config_feld").html(design_feld_html);
 			});
