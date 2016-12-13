@@ -21,7 +21,7 @@ function add_js_admin_product_edit( $hook ) {
     if ('post.php' != $hook) {
         return;
     }
-    wp_enqueue_script( 'admin_product_edit_js', plugin_dir_url( __FILE__ ) . '/js/admin_product_edit.js' );
+    wp_enqueue_script( 'admin_product_edit_js', plugin_dir_url( __FILE__ ) . 'js/admin_product_edit.js' );
 }
 add_action('admin_enqueue_scripts', 'add_js_admin_product_edit');
 

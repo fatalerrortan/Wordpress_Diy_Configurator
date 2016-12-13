@@ -240,13 +240,73 @@ class Product extends Controllers
 		$this->modal('design', $data);
 	}
 	
-	public function save()
+//	Xulin edit start
+	public function init_dir_for_design($root, $post_id, $color_ids){
+	    if(!is_dir($root.$post_id)){
+            mkdir($root.$post_id, 0777);
+	    }
+        foreach ($color_ids as $color){
+            if(empty($color)){continue;}
+            if(!is_dir($root.$post_id."/".$color)){
+                mkdir($root.$post_id."/".$color, 0777);
+            }
+        }
+        return true;
+//   file_put_contents($root."xulin_log.txt",$log,FILE_APPEND);
+    }
+
+    public function img_deployment($color_ids, $root){
+
+        foreach (explode(',',$color_ids) as $color){
+            if(empty($color)){continue;}
+            file_put_contents($root."xulin_log.txt",print_r($_FILES[$color],true),FILE_APPEND);
+            $new_img_files = $this->reArrayFiles($_FILES[$color]);
+            foreach ($new_img_files as $img){
+                if(empty($img['error'])){
+                    move_uploaded_file($img['tmp_name'], $root."/".$color."/".$img['name']);
+                }
+            }
+        }
+        return true;
+    }
+
+    public function reArrayFiles(&$file_post) {
+        $file_ary = array();
+        $file_count = count($file_post['name']);
+        $file_keys = array_keys($file_post);
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                if(!empty($file_post[$key][$i])){
+                    $file_ary[$i][$key] = $file_post[$key][$i];
+                }
+            }
+        }
+        return $file_ary;
+    }
+//  xulin edit end
+
+    public function save()
 	{
 //        Xulin edit start
+
         $target_json_location = $_SERVER['DOCUMENT_ROOT']."/tshirtecommerce/assets/custom_img/";
-        file_put_contents($target_json_location."test.txt",$_POST['testInput']);
+        file_put_contents($target_json_location."xulin_log.txt",'da sein!!!',FILE_APPEND);
+
+        $json_config_container = $_POST['config_json_container'];
+        $color_ids_container = explode(',', $_POST['color_ids_container']);
+//        $post_id = $_POST['post_id'];
+//        $color_ids_container = ',13,16,19,78';
+        $post_id = '99';
+        if($this->init_dir_for_design($target_json_location, $post_id, $color_ids_container)){
+            file_put_contents($target_json_location.$post_id."/".$post_id.".json",$json_config_container);
+        }
+//        $this->img_deployment($color_ids_container, $target_json_location.$post_id);
+
 //        Xulin edit end
-		if (empty($_POST['product']))
+
+
+
+        if (empty($_POST['product']))
 			$dgClass->redirect('index.php/product/edit');
 		
 		$data = $_POST['product'];
