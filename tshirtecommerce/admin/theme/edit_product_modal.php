@@ -89,7 +89,7 @@
 </head>
 <body>
 <div class="row">
-    <form id="fr-product" accept-charset="utf-8" method="post" enctype="multipart/form-data"
+    <form id="fr-product" accept-charset="utf-8" method="post"
           action="<?php echo site_url('index.php/product/save'); ?>">
         <div class="tabbable col-md-12">
             <ul id="myTab" class="nav nav-tabs tab-bricky">
@@ -812,7 +812,7 @@
             var design_color_box = {};
             var current_color = jQuery(this);
             var color = [current_color.attr('sku'), current_color.attr('id')];
-            color_ids_container = color_ids_container + "," + current_color.attr('sku');
+            color_ids_container = color_ids_container + ',' + current_color.attr('sku');
             design_color_box.color = color;
             //read variant box
             current_color.find('div').each(function () {
@@ -833,22 +833,24 @@
                     current_variant.push({"sku": current_variant_wp.attr('var_sku')});
                     current_variant.push({"label": current_variant_wp.find("input[class='front_label']").val()});
                     current_variant.push({"position": current_variant_wp.find("input[class='position']").val()});
-                    current_variant.push({"img_path": current_variant_wp.find("input[class='img_path']")[0].files[0].name});
+                    var file_name = 'undefined';
+                    if(current_variant_wp.find("input[class='img_path']")[0].files.length != 0){
+                        file_name = current_variant_wp.find("input[class='img_path']")[0].files[0].name;
+                    }
+                    current_variant.push({"img_path": file_name});
                     current_variant_wp.find("input[class='img_path']").attr('name', current_color.attr('sku')+"[]");
                     current_variant.push({"price": current_variant_wp.find("input[class='price']").val()});
 //							current_variant.push({"active":current_variant_wp.find("select option:selected").text()});
                     current_variant.push({"active": current_variant_wp.find("select").val()});
                     current_part.push({"variant": current_variant});
                 });
-                if (current_part_wp.attr('class') == 'variant_box') {
-                    return;
-                }
+                if (current_part_wp.attr('class') == 'variant_box') {return;}
                 design_color_box[current_part_wp.attr('class')] = current_part;
             });
             design_config_json.push(design_color_box);
         });
         jQuery("#config_json_container").val(JSON.stringify(design_config_json));
-        jQuery("#color_ids_container").val(JSON.stringify(color_ids_container));
+        jQuery("#color_ids_container").val(color_ids_container);
     });
     //for test #panel_tab2_example2 > div.row > div:nth-child(1) > p
     jQuery("#panel_tab2_example2 > div.row > div:nth-child(1) > p").click(function () {
@@ -858,7 +860,7 @@
             var design_color_box = {};
             var current_color = jQuery(this);
             var color = [current_color.attr('sku'), current_color.attr('id')];
-            color_ids_container = color_ids_container + "," + current_color.attr('sku');
+            color_ids_container = color_ids_container + ',' + current_color.attr('sku');
             design_color_box.color = color;
             //read variant box
             current_color.find('div').each(function () {
@@ -879,23 +881,25 @@
                     current_variant.push({"sku": current_variant_wp.attr('var_sku')});
                     current_variant.push({"label": current_variant_wp.find("input[class='front_label']").val()});
                     current_variant.push({"position": current_variant_wp.find("input[class='position']").val()});
-                    current_variant.push({"img_path": current_variant_wp.find("input[class='img_path']")[0].files[0].name});
+                    var file_name = 'undefined';
+                    if(current_variant_wp.find("input[class='img_path']")[0].files.length != 0){
+                         file_name = current_variant_wp.find("input[class='img_path']")[0].files[0].name;
+                    }
+                    current_variant.push({"img_path": file_name});
                     current_variant_wp.find("input[class='img_path']").attr('name', current_color.attr('sku')+"[]");
-//                    console.log(current_variant_wp.find("input[class='img_path']")[0].files[0].name);
                     current_variant.push({"price": current_variant_wp.find("input[class='price']").val()});
 //							current_variant.push({"active":current_variant_wp.find("select option:selected").text()});
                     current_variant.push({"active": current_variant_wp.find("select").val()});
                     current_part.push({"variant": current_variant});
                 });
-                if (current_part_wp.attr('class') == 'variant_box') {
-                    return;
-                }
+                if (current_part_wp.attr('class') == 'variant_box') {return;}
                 design_color_box[current_part_wp.attr('class')] = current_part;
             });
             design_config_json.push(design_color_box);
         });
         jQuery("#config_json_container").val(JSON.stringify(design_config_json));
         jQuery("#color_ids_container").val(JSON.stringify(color_ids_container));
+        console.log(jQuery("#color_ids_container").val());
     });
     //When add Button clicked
     jQuery("#add-new-variant").click(function () {
